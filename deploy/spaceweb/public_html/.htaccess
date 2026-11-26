@@ -1,0 +1,5 @@
+Options -Indexes
+DirectoryIndex index.html
+<FilesMatch "\.(?:env|sqlite|lock|log)$">
+Require all denied
+</FilesMatch>

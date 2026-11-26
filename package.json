@@ -1,0 +1,1 @@
+{"name":"starexe","private":true,"type":"module","scripts":{"build":"node scripts/build-spaceweb.mjs","test:spaceweb":"python scripts/test-spaceweb.py"},"dependencies":{"react":"19.2.6","react-dom":"19.2.6"},"devDependencies":{"esbuild":"0.28.0"}}

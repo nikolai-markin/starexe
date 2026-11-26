@@ -7,3 +7,9 @@ outputs/
 .env.*
 !.env.example
 *.log
+.build/
+deploy/spaceweb/storage/*.json
+deploy/spaceweb/storage/*.lock
+deploy/spaceweb/storage/*.tmp
+spaceweb/storage/*.json
+spaceweb/storage/*.lock

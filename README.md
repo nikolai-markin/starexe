@@ -1,59 +1,30 @@
 # STAR.exe
 
-Сайт для подготовки к ЕГЭ по информатике. Актуальный исходный код четырёх самостоятельных частей.
+Готовый вариант для хостинга Spaceweb: **`deploy/spaceweb/`**.
 
-| Папка | Назначение | Опубликованная версия |
-| --- | --- | --- |
-| apps/home | Главная страница | https://star-exe.namarkingpt.chatgpt.site/ |
-| apps/word-game | Водогрязеторфопарафинолечение: срезы, индексация, комнаты | https://slice-pop-ege.namarkingpt.chatgpt.site/ |
-| apps/turtle | Тренажёр Черепахи | https://star-exe-turtle.namarkingpt.chatgpt.site/ |
-| apps/ip13 | Интерактивная запись «13 задание. TCP/IP» | https://star-exe-ip13.namarkingpt.chatgpt.site/ |
+Инструкция загрузки и запуска: **[SPACEWEB.md](SPACEWEB.md)**.
 
-## Главная и запись TCP/IP
+| Адрес на вашем домене | Страница |
+| --- | --- |
+| `/` | Главная |
+| `/game/` | Водогрязеторфопарафинолечение |
+| `/turtle/` | Тренажёр Черепахи |
+| `/records/13-tcp-ip/` | Запись «13 задание. TCP/IP» |
 
-Готовые HTML/CSS/JS и изображения лежат в `dist/`. Сборка не требуется.
+В корне сайта размещается содержимое `public_html`. Серверная логика и хранилище лежат рядом с ним, вне публичного каталога. Сервер комнат работает на PHP без Cloudflare D1 и регистрации. Срезы проверяются на сервере, бонусы сохраняются. Логотипы возвращают на главную.
 
-```sh
-python -m http.server 8080 --directory apps/home/dist
-# или
-python -m http.server 8081 --directory apps/ip13/dist
-```
-
-## Черепаха
-
-Исходники TypeScript/React находятся в `apps/turtle/src`, готовая версия — в `apps/turtle/dist`.
+## Разработка
 
 ```sh
-cd apps/turtle
 npm install
 npm run build
-python -m http.server 8082 --directory dist
+npm run test:spaceweb
 ```
 
-Это учебное подмножество Python, а не полноценный интерпретатор. Поддерживаются команды движения, goto/dot, скорость, tracer/update/done, арифметика, переменные и вложенные for/range. Лимит 500 000 операций. Фото черепахи имеет прозрачный фон.
+Для теста требуется локальный PHP 8.1+ и Python 3.
 
-## Игра со словами
+Исходные части: `apps/home`, `apps/word-game`, `apps/turtle`, `apps/ip13`. Актуальные единые страницы собираются скриптом `scripts/build-spaceweb.mjs`; готовые файлы сохранены в `deploy/spaceweb` для загрузки без сборки.
 
-React/Vinext + Cloudflare D1 для комнат двух игроков. Без регистрации внутри игры.
+Тренажёр Черепахи реализует учебное подмножество Python. Игра использует расширенный русский словарь; MIT-лицензия источника сохранена в `apps/word-game/data/russian-words-LICENSE.txt` и `deploy/spaceweb/server/russian-words-LICENSE.txt`.
 
-```sh
-cd apps/word-game
-npm install
-npm run dev
-```
-
-Серверные комнаты требуют D1 binding `DB` и применения SQL-миграций из `drizzle/`. Данные локальной и опубликованной D1 раздельны. Конфигурация Sites сохранена в `.openai/hosting.json`; секретов в ней нет. Сборка: `npm run build`.
-
-Начисление очков: 10 за букву и 10 за каждый срез, давший минимум две буквы. Повторы слова не засчитываются. Словарь: `lib/russian-dictionary.ts`; MIT-лицензия и описание исходного словаря в `data/` (исходный большой файл не дублируется).
-
-В `apps/word-game/app/turtle` сохранена ранняя встроенная версия Черепахи; актуальный тренажёр находится в `apps/turtle`.
-
-## Проверки
-
-```sh
-node --experimental-strip-types apps/turtle/check.mts
-node --experimental-strip-types apps/turtle/regression.mts
-python apps/ip13/verify.py
-```
-
-Все текущие переходы между частями используют опубликованные адреса Sites. При переносе на единый домен эти адреса нужно заменить на локальные маршруты.
+Предыдущие публикации Sites продолжают работать отдельно; их настройки сохранены в исходных папках. Текущая задача не меняет доступ к этим публикациям и не выполняет загрузку на Spaceweb.
